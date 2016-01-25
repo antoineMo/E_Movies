@@ -69,16 +69,21 @@ function del_student($argv)
 	$cursor = $collection->findOne(array("login" => $argv[2]));
         if (isset($cursor))
 	{
-		echo "Are you sure ? Y/N\n> ";
+		echo "Are you sure ? oui/non\n> ";
 		$str = readLine();
 		
-		if (strcmp($str, "Y") == 0)
+		if (strcmp($str, "oui") == 0 || strcmp($str, "yes") == 0)
 		{
 			$collection->remove(array('login' => $argv[2]));
 			echo "L'utilisateur a été supprimé\n";
 		}
-		else
+		else if (strcmp($str, "non") == 0 || strcmp($str, "no") == 0)
 		echo "L'utilisateur n'a pas été supprimé\n";
+		else
+		{
+			echo "Commande incorrect !\n\n";
+			del_student($argv);
+		}
 	}
 	else
 	 echo "Cet utilisateur n'est pas enregistré !\n";
