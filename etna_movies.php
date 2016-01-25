@@ -1,12 +1,10 @@
 <?php
 
-function connexion()
-{
 	$connect = new MongoClient();
 	$db = $connect->db_etna;
 
 	$collection = $db->students;
-}
+
 
 function verif_age()
 {
@@ -63,9 +61,33 @@ function verif_phone()
 	return ($str);
 }	
 
+function del_student($argv)
+{
+	$connect = new MongoClient();
+	$db = $connect->db_etna;
+        $collection = $db->students;
+	$cursor = $collection->findOne(array("login" => $argv[2]));
+        if (isset($cursor))
+	{
+		echo "Are you sure ? Y/N\n";
+		$str = readLine();
+		
+		if (strcmp($str, "Y") == 0)
+		{
+			$collection->remove(array('login' => $argv[2]));
+			echo "L'utilisateur a été supprimé\n";
+		}
+		else
+		echo "L'utilisateur n'a pas été supprimé\n";
+	}
+	else
+	 echo "Cet utilisateur n'est pas enregistré !\n";
+
+}
+
 function add_student($argv)
 {
-	if (preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2], $array))
+	if (preg_match_all("/[a-z]{1,6}_[a-z0-9]/", $argv[2], $array))
 	{
 		echo "Nom ?\n> ";
 		$name = verif_name();
@@ -93,11 +115,6 @@ function show_student($argv)
 {
 	if (preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2], $array))
 	{
-		$connect = new MongoClient();
-		$db = $connect->db_etna;
-
-                $collection = $db->students;
-		
 
 		$cursor = $collection->findOne(array("login" => $argv[2]));
 
