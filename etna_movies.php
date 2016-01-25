@@ -69,7 +69,7 @@ function del_student($argv)
 	$cursor = $collection->findOne(array("login" => $argv[2]));
         if (isset($cursor))
 	{
-		echo "Are you sure ? Y/N\n";
+		echo "Are you sure ? Y/N\n> ";
 		$str = readLine();
 		
 		if (strcmp($str, "Y") == 0)
