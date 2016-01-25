@@ -76,11 +76,45 @@ function add_student($argv)
 		echo "Numéro de téléphone ?\n> ";
 		$phone = verif_phone();
 		echo "Utilisateur enregistré \n";
+
+		$connect = new MongoClient();
+		$db = $connect->db_etna;
+
+		$collection = $db->students;
+
+		$document = array( "login" => $argv[2], "name" => $name, "age" => $age, "email" => $mail, "phone" => $phone);
+		$collection->insert($document);
 	}
 	else
 		echo "Login incorrect !\n";
 }
 
+function show_student($argv)
+{
+	if (preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2], $array))
+	{
+		$connect = new MongoClient();
+		$db = $connect->db_etna;
+
+                $collection = $db->students;
+		
+
+		$cursor = $collection->findOne(array("login" => $argv[2]));
+
+		if (isset($cursor))
+		{
+			echo "login : " . $cursor["login"] . "\n";
+			echo "nom : " . $cursor["name"] . "\n";
+			echo "age : " . $cursor["age"] . "\n";
+			echo "email : " . $cursor["email"] . "\n";
+			echo "phone : " . $cursor["phone"] . "\n";
+   		}
+		else
+			echo "khajiit stole nothing, khajiit is innocent of this crime\n";
+	}
+	else
+		echo "Login incorrect !\n";
+}
 function verif($argv)
 {
 	if	(isset($argv[3]))
