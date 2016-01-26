@@ -33,6 +33,26 @@ function movies_storing($argv)
 	echo $i . " films ajoutés !\n";
 }
 
+function show_movies($argv)
+{
+	$connect = new MongoClient();
+	$db = $connect->db_etna;
+	$collection = $db->movies;
+	$cursor = $collection->find();
+	
+	foreach ($cursor as $document)
+	{
+		echo "\nimdb_code : " . $document["imdb_code"] . "\n";
+		echo "title : " . $document["title"] . "\n";
+		echo "year : " . $document["year"] . "\n";
+		echo "genres : " . $document["genres"] . "\n";
+		echo "directors : " . $document["directors"] . "\n";
+		echo "rate : " . $document["rate"] . "\n";
+		echo "link : " . $document["link"] . "\n";
+		echo "stock : " . $document["stock"] . "\n";
+	}
+}
+
 function del_student($argv)
 {
 	if (!isset($argv[2]))
