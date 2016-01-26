@@ -2,7 +2,7 @@
 
 require_once('verif_movie.php');
 require_once('other_func.php');
-
+require_once('show_movies.php');
 
 function movies_storing($argv)
 {
@@ -32,26 +32,12 @@ function movies_storing($argv)
 	}
 	echo $i . " films ajoutés !\n";
 }
-
+	
 function show_movies($argv)
 {
-	$connect = new MongoClient();
-	$db = $connect->db_etna;
-	$collection = $db->movies;
-	$cursor = $collection->find();
-	
-	foreach ($cursor as $document)
-	{
-		echo "\nimdb_code : " . $document["imdb_code"] . "\n";
-		echo "title     : " . $document["title"] . "\n";
-		echo "year      : " . $document["year"] . "\n";
-		echo "genres    : " . $document["genres"] . "\n";
-		echo "directors : " . $document["directors"] . "\n";
-		echo "rate      : " . $document["rate"] . "\n";
-		echo "link      : " . $document["link"] . "\n";
-		echo "stock     : " . $document["stock"] . "\n";
-	}
+	show_movies_norm();
 }
+
 
 function del_student($argv)
 {
@@ -117,7 +103,7 @@ function add_student($argv)
 
 function verif($argv)
 {
-	if	(isset($argv[3]))
+	if	(isset($argv[4]))
 	   echo "Trop d'arguments !\n";
 	else if (isset($argv[1]))
 	{

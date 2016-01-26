@@ -1,7 +1,5 @@
 <?php
 
-require_once('verif_movie.php');
-
 function verif_update($str)
 {	
 	if ($str == "name")
