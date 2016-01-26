@@ -1,11 +1,5 @@
 <?php
 
-	$connect = new MongoClient();
-	$db = $connect->db_etna;
-
-	$collection = $db->students;
-
-
 function verif_age()
 {
 	$str = readLine();
@@ -116,6 +110,52 @@ function add_student($argv)
 		echo "Login incorrect !\n";
 }
 
+function verif_update($str)
+{	
+	if ($str == "name")
+	{
+	echo "New name ? \n> ";
+	$up = verif_name();
+	}
+	else if ($str == "age")
+	{
+	echo "New age ? \n> ";
+	$up = verif_age();
+	}
+	else if ($str == "email")
+	{
+	echo "New email ? \n> ";
+	$up = verif_mail();
+	}
+	else if ($str == "phone")
+	{
+	echo "New age ? \n> ";
+	$up = verif_phone();
+	}
+	return($up);
+}
+
+function update_student($argv)
+{
+	if (preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2], $array))
+	{
+		echo "What do you want to update? \n> ";
+		$str = readLine();
+		$up = verif_update($str);
+		
+		if (isset($up))
+		{
+			$connect = new MongoClient();
+			$db = $connect->db_etna;
+			$collection = $db->students;
+			$newdata = array('$set' => array($str => $up));
+			$collection->update(array("login" => $argv[2]), $newdata);
+		}
+	}
+	else
+		echo "Login incorrect !\n";
+}
+
 function show_student($argv)
 {
 	if (preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2], $array))
@@ -137,6 +177,7 @@ function show_student($argv)
 	else
 		echo "Login incorrect !\n";
 }
+
 function verif($argv)
 {
 	if	(isset($argv[3]))
