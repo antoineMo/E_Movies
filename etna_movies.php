@@ -43,13 +43,13 @@ function show_movies($argv)
 	foreach ($cursor as $document)
 	{
 		echo "\nimdb_code : " . $document["imdb_code"] . "\n";
-		echo "title : " . $document["title"] . "\n";
-		echo "year : " . $document["year"] . "\n";
-		echo "genres : " . $document["genres"] . "\n";
+		echo "title     : " . $document["title"] . "\n";
+		echo "year      : " . $document["year"] . "\n";
+		echo "genres    : " . $document["genres"] . "\n";
 		echo "directors : " . $document["directors"] . "\n";
-		echo "rate : " . $document["rate"] . "\n";
-		echo "link : " . $document["link"] . "\n";
-		echo "stock : " . $document["stock"] . "\n";
+		echo "rate      : " . $document["rate"] . "\n";
+		echo "link      : " . $document["link"] . "\n";
+		echo "stock     : " . $document["stock"] . "\n";
 	}
 }
 
