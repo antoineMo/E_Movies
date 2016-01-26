@@ -1,5 +1,8 @@
 <?php
 
+require_once('verif_movie.php');
+require_once('other_func.php');
+
 
 function movies_storing($argv)
 {
@@ -19,7 +22,7 @@ function movies_storing($argv)
 		$document = array( "imdb_code" => $tab[$i][1],
 			    	  "title" => $tab[$i][5],
 				  "year" => $tab[$i][11],
-				  "genres" => $tab[$i][15],
+				  "genres" => $tab[$i][12],
 				  "directors" => $tab[$i][7],
 				  "rate" => $tab[$i][9],
 				  "link" => $tab[$i][15],
@@ -29,9 +32,6 @@ function movies_storing($argv)
 	}
 	echo $i . " films ajoutés !\n";
 }
-
-require_once('verif_movie.php');
-require_once('other_func.php');
 
 function del_student($argv)
 {
