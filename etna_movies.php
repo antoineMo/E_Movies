@@ -35,7 +35,12 @@ function movies_storing($argv)
 	
 function show_movies($argv)
 {
+	if (!isset($argv[2]))
 	show_movies_norm();
+	else if ($argv[2] == "desc")
+	show_movies_desc();
+	else
+	echo "arguments invalides !\n";
 }
 
 

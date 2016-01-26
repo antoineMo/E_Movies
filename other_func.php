@@ -91,7 +91,7 @@ function show_student($argv)
 			echo "phone : " . $cursor["phone"] . "\n";
    		}
 		else
-			echo "khajiit stole nothing, khajiit is innocent of this crime\n";
+			echo "login incorrect\n";
 	}
 
 	else

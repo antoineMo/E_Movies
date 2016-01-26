@@ -11,9 +11,12 @@ function show_movies_norm()
         $db = $connect->db_etna;
         $collection = $db->movies;
         $cursor = $collection->find();
-        $array = iterator_to_array($cursor);
-        usort($array, 'compare_t');
-        foreach ($array as $document)
+
+	$array = iterator_to_array($cursor);
+
+	usort($array, 'compare_t');
+
+	foreach ($array as $document)
         {
                 echo "\nimdb_code : " . $document["imdb_code"] . "\n";
                 echo "title     : " . $document["title"] . "\n";
