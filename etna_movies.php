@@ -1,59 +1,6 @@
 <?php
 
-function verif_age()
-{
-	$str = readLine();
-	while (preg_match_all("/^[0-9]{1,2}$/", $str) == 0)
-	{
-		echo "Age incorrect !\n> ";
-		$str = readLine();
-	}
-	return ($str);
-}
-
-function verif_mail()
-{
-	$str = readLine();
-	while (preg_match_all("/^[a-z0-9._-]+@[a-z0-9._-]+.[a-z]{2,4}$/", $str) == 0)
-	{
-		echo "Mail incorrect !\n> ";
-		$str = readLine();
-	}
-	return ($str);
-}
-
-function verif_name()
-{
-	$str = readLine();
-	while (preg_match_all("/^[ a-zA-Z-]+$/", $str) == 0)
-	{
-		echo "Nom incorrect !\n> ";
-		$str = readLine();
-	}
-        return ($str);
-}
-
-function champ_vide()
-{
-	$str = readLine();
-        while (strcmp($str, "") == 0)
-	{
-		echo "Champ obligatoire !\n> ";
-                $str = readLine();
-	}
-	return ($str);
-}
-
-function verif_phone()
-{
-	$str = readLine();
-	while (preg_match_all("/^0[1-68]([-. ]?[0-9]{2}){4}$/", $str) == 0)
-	{
-		echo "Numéro invalide !\n> ";
-		$str = readLine();
-	}
-	return ($str);
-}	
+require_once('verif_movie.php');
 
 function del_student($argv)
 {
@@ -100,7 +47,6 @@ function add_student($argv)
 
 		$connect = new MongoClient();
 		$db = $connect->db_etna;
-
 		$collection = $db->students;
 
 		$document = array( "login" => $argv[2], "name" => $name, "age" => $age, "email" => $mail, "phone" => $phone);
@@ -114,23 +60,28 @@ function verif_update($str)
 {	
 	if ($str == "name")
 	{
-	echo "New name ? \n> ";
-	$up = verif_name();
+		echo "New name ? \n> ";
+		$up = verif_name();
 	}
 	else if ($str == "age")
 	{
-	echo "New age ? \n> ";
-	$up = verif_age();
+		echo "New age ? \n> ";
+		$up = verif_age();
 	}
 	else if ($str == "email")
 	{
-	echo "New email ? \n> ";
-	$up = verif_mail();
+		echo "New email ? \n> ";
+		$up = verif_mail();
 	}
 	else if ($str == "phone")
 	{
-	echo "New age ? \n> ";
-	$up = verif_phone();
+		echo "New age ? \n> ";
+		$up = verif_phone();
+	}
+	else
+	{
+		echo "cannot update\n";
+		return (0);
 	}
 	return($up);
 }
@@ -143,13 +94,14 @@ function update_student($argv)
 		$str = readLine();
 		$up = verif_update($str);
 		
-		if (isset($up))
+		if ($up != 0)
 		{
 			$connect = new MongoClient();
 			$db = $connect->db_etna;
 			$collection = $db->students;
 			$newdata = array('$set' => array($str => $up));
 			$collection->update(array("login" => $argv[2]), $newdata);
+			echo "User informations modified !";
 		}
 	}
 	else
@@ -161,6 +113,9 @@ function show_student($argv)
 	if (preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2], $array))
 	{
 
+		$connect = new MongoClient();
+		$db = $connect->db_etna;
+		$collection = $db->students;
 		$cursor = $collection->findOne(array("login" => $argv[2]));
 
 		if (isset($cursor))
