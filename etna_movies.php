@@ -149,6 +149,22 @@ function update_student($argv)
 		echo "Login incorrect !\n";
 }
 
+function show_all_student()
+{
+	$connect = new MongoClient();
+	$db = $connect->db_etna;
+	$collection = $db->students;
+	$cursor = $collection->find();
+	foreach ($cursor as $document)
+	{
+		echo "login : " . $document["login"] . "\n";
+		echo "nom : " . $document["name"] . "\n";
+		echo "age : " . $document["age"] . "\n";
+		echo "email : " . $document["email"] . "\n";
+		echo "phone : " . $document["phone"] . "\n";
+	}
+}
+
 function show_student($argv)
 {
 	$connect = new MongoClient();
@@ -173,7 +189,7 @@ function show_student($argv)
 			echo "khajiit stole nothing, khajiit is innocent of this crime\n";
 	}
 	else
-		echo "Login incorrect !\n";
+		show_all_student();
 }
 
 function verif($argv)
