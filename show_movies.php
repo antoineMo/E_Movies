@@ -8,9 +8,13 @@ function show_it($cursor)
                 echo "\nimdb_code : " . $document["imdb_code"] . "\n";
                 echo "title     : " . $document["title"] . "\n";
                 echo "year      : " . $document["year"] . "\n";
-                echo "genres    : " . $document["genres"] . "\n";
-                echo "directors : " . $document["directors"] . "\n";
-                echo "rate      : " . $document["rate"] . "\n";
+                echo "genres    : ";
+		foreach ($document["genres"] as $sous_genre)
+			echo $sous_genre . ", ";
+                echo "\ndirectors : ";
+		foreach ($document["directors"] as $sous_dir)
+			echo $sous_dir . ", ";
+                echo "\nrate      : " . $document["rate"] . "\n";
                 echo "link      : " . $document["link"] . "\n";
                 echo "stock     : " . $document["stock"] . "\n";
 		$i++;
@@ -39,6 +43,7 @@ function show_movie_genre($genre)
 	$collection = $db->movies;
 	$cursor = $collection->find(array('genres' => new MongoRegex("/$genre/i")));
 
+
 	$cursor->sort(array('title' => 1));
 
 	show_it($cursor);
@@ -51,7 +56,7 @@ function show_movie_year($year)
 	$connect = new MongoClient();
 	$db = $connect->db_etna;
 	$collection = $db->movies;
-	$cursor = $collection->find(array('year' => $year));
+	$cursor = $collection->find(array('year' => intval($year)));
 
 	$cursor->sort(array('title' => 1));
 
@@ -65,7 +70,8 @@ function show_movie_rate($rate)
 	$collection = $db->movies;
 
 	$intrate = intval($rate);
-	$cursor = $collection->find(array('rate' => new MongoRegex("/^$intrate/i")));
+	$where=array('rate' => array( '$gte' => $intrate, '$lt' => $intrate+1 ));
+	$cursor = $collection->find($where);
 
 	$cursor->sort(array('title' => 1));
 

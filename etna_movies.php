@@ -82,27 +82,28 @@ function movies_storing($argv)
 	{
 		$int = rand(0, 5);
 		$document = array( "imdb_code" => $tab[$i][1], "title" => $tab[$i][5],
-				  "year" => $tab[$i][11], "genres" => $tab[$i][12],
-				  "directors" => $tab[$i][7], "rate" => $tab[$i][9],
-				  "link" => $tab[$i][15], "stock" => $int
-				  );
-		$collection->insert($document);
+			"year" => intval($tab[$i][11]), "genres" => explode( ',', $tab[$i][12]),
+			"directors" => explode( ',', $tab[$i][7]), "rate" => floatval($tab[$i][9]),
+			"link" => $tab[$i][15], "stock" => $int
+		);
 	}
 	echo $i . " films ajoutés !\n";
 }
 
 function show_movies($argv)
 {
-	if (!isset($argv[2]))
-		show_movies_norm(1);
-	else if ($argv[2] == "desc")
-	     	show_movies_norm(-1);
-	else if ($argv[2] == "genre" && isset($argv[3]))
-	     	show_movie_genre($argv[3]);
-	else if ($argv[2] == "year")
-	     	show_movie_year($argv[3] && isset($argv[3]));
-	else
-	echo "arguments invalides !\n";
+        if (!isset($argv[2]))
+                show_movies_norm(1);
+        else if ($argv[2] == "desc")
+                show_movies_norm(-1);
+        else if ($argv[2] == "genre" && isset($argv[3]))
+                show_movie_genre($argv[3]);
+        else if ($argv[2] == "year" && isset($argv[3]))
+                show_movie_year($argv[3]);
+        else if ($argv[2] == "rate" && isset($argv[3]) && is_numeric($argv[3]))
+                show_movie_rate($argv[3]);
+        else
+	        echo "arguments invalides !\n";
 }
 
 
