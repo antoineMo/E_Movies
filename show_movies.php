@@ -56,6 +56,20 @@ function show_movie_year($year)
 	$cursor->sort(array('title' => 1));
 
 	show_it($cursor);
+}
+
+function show_movie_rate($rate)
+{
+	$connect = new MongoClient();
+	$db = $connect->db_etna;
+	$collection = $db->movies;
+
+	$intrate = intval($rate);
+	$cursor = $collection->find(array('rate' => new MongoRegex("/^$intrate/i")));
+
+	$cursor->sort(array('title' => 1));
+
+	show_it($cursor);
 
 }
 

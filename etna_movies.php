@@ -45,7 +45,7 @@ function show_movies($argv)
 	     	show_movie_genre($argv[3]);
 	else if ($argv[2] == "year" && isset($argv[3]))
 	     	show_movie_year($argv[3]);
-	else if ($argv[2] == "rate" && isset($argv[3]))
+	else if ($argv[2] == "rate" && isset($argv[3]) && is_numeric($argv[3]))
 	     	show_movie_rate($argv[3]);
 	else
 	echo "arguments invalides !\n";
