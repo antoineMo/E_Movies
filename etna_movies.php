@@ -32,13 +32,17 @@ function movies_storing($argv)
 	}
 	echo $i . " films ajoutés !\n";
 }
-	
+
 function show_movies($argv)
 {
 	if (!isset($argv[2]))
-	show_movies_norm();
+		show_movies_norm(1);
 	else if ($argv[2] == "desc")
-	show_movies_desc();
+	     	show_movies_norm(-1);
+	else if ($argv[2] == "genre" && isset($argv[3]))
+	     	show_movie_genre($argv[3]);
+	else if ($argv[2] == "year")
+	     	show_movie_year($argv[3] && isset($argv[3]));
 	else
 	echo "arguments invalides !\n";
 }

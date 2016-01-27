@@ -1,22 +1,9 @@
 <?php
 
-function compare_t($a, $b)
+function show_it($cursor)
 {
-	return strnatcmp($a['title'], $b['title']);
-}
-
-function show_movies_norm()
-{
-        $connect = new MongoClient();
-        $db = $connect->db_etna;
-        $collection = $db->movies;
-        $cursor = $collection->find();
-
-	$array = iterator_to_array($cursor);
-
-	usort($array, 'compare_t');
-
-	foreach ($array as $document)
+	$i = 0;
+	foreach ($cursor as $document)
         {
                 echo "\nimdb_code : " . $document["imdb_code"] . "\n";
                 echo "title     : " . $document["title"] . "\n";
@@ -26,7 +13,50 @@ function show_movies_norm()
                 echo "rate      : " . $document["rate"] . "\n";
                 echo "link      : " . $document["link"] . "\n";
                 echo "stock     : " . $document["stock"] . "\n";
+		$i++;
         }
+	echo "*" . $i . "*\n";
+}
+
+function show_movies_norm($x)
+{
+
+	$connect = new MongoClient();
+       	$db = $connect->db_etna;
+       	$collection = $db->movies;
+       	$cursor = $collection->find();
+
+	$cursor->sort(array('title' => $x));
+
+	show_it($cursor);
+
+}
+
+function show_movie_genre($genre)
+{
+	$connect = new MongoClient();
+	$db = $connect->db_etna;
+	$collection = $db->movies;
+	$cursor = $collection->find(array('genres' => new MongoRegex("/$genre/i")));
+
+	$cursor->sort(array('title' => 1));
+
+	show_it($cursor);
+
+}
+
+function show_movie_year($year)
+{
+
+	$connect = new MongoClient();
+	$db = $connect->db_etna;
+	$collection = $db->movies;
+	$cursor = $collection->find(array('year' => $year));
+
+	$cursor->sort(array('title' => 1));
+
+	show_it($cursor);
+
 }
 
 ?>
