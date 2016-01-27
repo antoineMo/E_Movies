@@ -58,6 +58,8 @@ function movies_storing($argv)
 	$connect = new MongoClient();
   $db = $connect->db_etna;
 	$collection = $db->movies;
+	$collection->drop();
+	$collection = $db->movies;
         $file = "movies.csv";
 	if (is_readable($file) == true)
 	{
@@ -86,8 +88,10 @@ function show_movies($argv)
 	     	show_movies_norm(-1);
 	else if ($argv[2] == "genre" && isset($argv[3]))
 	     	show_movie_genre($argv[3]);
-	else if ($argv[2] == "year")
-	     	show_movie_year($argv[3] && isset($argv[3]));
+	else if ($argv[2] == "year" && isset($argv[3]))
+	     	show_movie_year($argv[3]);
+	else if ($argv[2] == "rate" && isset($argv[3]) && is_numeric($argv[3]))
+	     	show_movie_rate($argv[3]);
 	else
 	echo "arguments invalides !\n";
 }
