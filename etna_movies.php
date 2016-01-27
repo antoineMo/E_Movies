@@ -4,6 +4,12 @@ require_once('verif_movie.php');
 require_once('other_func.php');
 require_once('show_movies.php');
 
+function rent_movie2($argv)
+{
+
+
+}
+
 function rent_movie($argv)
 {
 	$tmp = verif_rent_movie($argv);
@@ -25,6 +31,11 @@ function rent_movie($argv)
 				$newdata2 = array('$set' => array("renting_students" => $cursor['_id']->{'$id'} . ", "));
 			$collection2->update(array("imdb_code" => $argv[3]), $newdata);
 			$collection2->update(array("imdb_code" => $argv[3]), $newdata2, array("upsert" => true));
+			if (isset($cursor["rented_movies"]))
+				$newdata3 = array('$set' => array("rented_movies" => $cursor["rented_movies"] . $cursor2['_id']->{'$id'} . ", "));
+			else
+				$newdata3 = array('$set' => array("rented_movies" => $cursor2['_id']->{'$id'} . ", "));
+			$collection->update(array("login" => $argv[2]), $newdata3, array("upsert" => true));
 		}
 	}
 }
