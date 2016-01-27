@@ -18,11 +18,13 @@ function rent_movie($argv)
 		if ($cursor2["stock"] == 0)
 			echo "Stock-out !\n";
 		else {
-			var_dump($cursor2);
-			$newdata = array('$set' => array("stock" => $cursor2["stock"] - 1),
-																			 "renting_students" => $cursor2['_id']->{'$id'});
-			$collection2->update(array("imdb_code" => $argv[3]), $newdata, array("upsert" => true));
-
+			$newdata = array('$set' => array("stock" => $cursor2["stock"] - 1));
+			if (isset($cursor2["renting_students"]))
+				$newdata2 = array('$set' => array("renting_students" => $cursor2["renting_students"] . $cursor['_id']->{'$id'} . ", "));
+			else
+				$newdata2 = array('$set' => array("renting_students" => $cursor['_id']->{'$id'} . ", "));
+			$collection2->update(array("imdb_code" => $argv[3]), $newdata);
+			$collection2->update(array("imdb_code" => $argv[3]), $newdata2, array("upsert" => true));
 		}
 	}
 }
