@@ -4,10 +4,59 @@ require_once('verif_movie.php');
 require_once('other_func.php');
 require_once('show_movies.php');
 
+function rent_movie($argv)
+{
+	$tmp = verif_rent_movie($argv);
+	if ($tmp == 1)
+	{
+		$connect = new MongoClient();
+		$db = $connect->db_etna;
+		$collection = $db->students;
+		$collection2 = $db->movies;
+		$cursor = $collection->findOne(array("login" => $argv[2]));
+		$cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
+		if ($cursor2["stock"] == 0)
+			echo "Stock-out !\n";
+		else {
+			var_dump($cursor2);
+			$newdata = array('$set' => array("stock" => $cursor2["stock"] - 1),
+																			 "renting_students" => $cursor2['_id']->{'$id'});
+			$collection2->update(array("imdb_code" => $argv[3]), $newdata);
+
+		}
+	}
+}
+
+function verif_rent_movie($argv)
+{
+	$connect = new MongoClient();
+	$db = $connect->db_etna;
+  $collection = $db->students;
+	$collection2 = $db->movies;
+
+	if (isset($argv[2]) && isset($argv[3]))
+	{
+		$cursor = $collection->findOne(array("login" => $argv[2]));
+		if (isset($cursor))
+		{
+			$cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
+			if (isset($cursor2))
+				return (1);
+			else
+				echo "imdb_code incorrect \n";
+		}
+		else
+			echo "Login incorrect ou n'est pas enregistré \n";
+	}
+	else
+		echo "Pas assez d'arguments !\n";
+	return (0);
+}
+
 function movies_storing($argv)
 {
 	$connect = new MongoClient();
-        $db = $connect->db_etna;
+  $db = $connect->db_etna;
 	$collection = $db->movies;
         $file = "movies.csv";
 	if (is_readable($file) == true)
@@ -19,14 +68,10 @@ function movies_storing($argv)
 	for ($i = 1; isset($tab[$i]); $i++)
 	{
 		$int = rand(0, 5);
-		$document = array( "imdb_code" => $tab[$i][1],
-			    	  "title" => $tab[$i][5],
-				  "year" => $tab[$i][11],
-				  "genres" => $tab[$i][12],
-				  "directors" => $tab[$i][7],
-				  "rate" => $tab[$i][9],
-				  "link" => $tab[$i][15],
-				  "stock" => $int
+		$document = array( "imdb_code" => $tab[$i][1], "title" => $tab[$i][5],
+				  "year" => $tab[$i][11], "genres" => $tab[$i][12],
+				  "directors" => $tab[$i][7], "rate" => $tab[$i][9],
+				  "link" => $tab[$i][15], "stock" => $int
 				  );
 		$collection->insert($document);
 	}
@@ -57,9 +102,9 @@ function del_student($argv)
 	}
 	$connect = new MongoClient();
 	$db = $connect->db_etna;
-        $collection = $db->students;
+  $collection = $db->students;
 	$cursor = $collection->findOne(array("login" => $argv[2]));
-        if (isset($cursor))
+  if (isset($cursor))
 	{
 		echo "Are you sure ? oui/non\n> ";
 		$str = readLine();
@@ -121,11 +166,11 @@ function verif($argv)
 		   $ptr($argv);
 		else
 		   echo "Argument incorrect\n";
-	
+
 	}
 	else
 	echo "Pas assez d'arguemtns !\n";
-	
+
 
 }
 
