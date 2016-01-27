@@ -21,7 +21,7 @@ function rent_movie($argv)
 			var_dump($cursor2);
 			$newdata = array('$set' => array("stock" => $cursor2["stock"] - 1),
 																			 "renting_students" => $cursor2['_id']->{'$id'});
-			$collection2->update(array("imdb_code" => $argv[3]), $newdata);
+			$collection2->update(array("imdb_code" => $argv[3]), $newdata, array("upsert" => true));
 
 		}
 	}
@@ -58,8 +58,6 @@ function movies_storing($argv)
 	$connect = new MongoClient();
   $db = $connect->db_etna;
 	$collection = $db->movies;
-	$collection->drop();
-	$collection = $db->movies;
         $file = "movies.csv";
 	if (is_readable($file) == true)
 	{
@@ -88,10 +86,8 @@ function show_movies($argv)
 	     	show_movies_norm(-1);
 	else if ($argv[2] == "genre" && isset($argv[3]))
 	     	show_movie_genre($argv[3]);
-	else if ($argv[2] == "year" && isset($argv[3]))
-	     	show_movie_year($argv[3]);
-	else if ($argv[2] == "rate" && isset($argv[3]) && is_numeric($argv[3]))
-	     	show_movie_rate($argv[3]);
+	else if ($argv[2] == "year")
+	     	show_movie_year($argv[3] && isset($argv[3]));
 	else
 	echo "arguments invalides !\n";
 }
