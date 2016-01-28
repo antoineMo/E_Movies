@@ -12,6 +12,8 @@ function movies_storing($argv)
 	$connect = new MongoClient();
 	$db = $connect->db_etna;
 	$collection = $db->movies;
+	$collection->drop();
+	$collection = $db->movies;
         $file = "movies.csv";
 	if (is_readable($file) == true)
 	{
@@ -27,6 +29,7 @@ function movies_storing($argv)
 			"directors" => explode( ',', $tab[$i][7]), "rate" => floatval($tab[$i][9]),
 			"link" => $tab[$i][15], "stock" => $int
 		);
+		$collection->insert($document);
 	}
 	echo $i . " films ajoutés !\n";
 }
@@ -57,7 +60,7 @@ function del_student($argv)
 	}
 	$connect = new MongoClient();
 	$db = $connect->db_etna;
-  $collection = $db->students;
+	$collection = $db->students;
 	$cursor = $collection->findOne(array("login" => $argv[2]));
   if (isset($cursor))
 	{

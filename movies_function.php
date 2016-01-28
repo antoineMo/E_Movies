@@ -35,7 +35,7 @@ function return_movie($argv)
 		{
 			up_user($argv);
 			up_movie($argv);
-			echo "Returned";
+			echo "Returned\n";
 		}
 	}
 }
