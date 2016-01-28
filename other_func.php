@@ -59,17 +59,17 @@ function show_all_student()
 	$collection = $db->students;
 	$cursor = $collection->find();
 
-	
+	$i = 0;
 	foreach ($cursor as $document)
 	{
-		echo "login : " . $document["login"] . "\n";
-		echo "nom : " . $document["name"] . "\n";
-		echo "age : " . $document["age"] . "\n";
+		echo "\nlogin : " . $document["login"] . "\n";
+		echo "nom   : " . $document["name"] . "\n";
+		echo "age   : " . $document["age"] . "\n";
 		echo "email : " . $document["email"] . "\n";
 		echo "phone : " . $document["phone"] . "\n";
+		$i++;
 	}
-
-
+	echo "*" . $i . "*\n";
 }
 
 function show_student($argv)

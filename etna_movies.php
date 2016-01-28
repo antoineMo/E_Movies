@@ -3,73 +3,14 @@
 require_once('verif_movie.php');
 require_once('other_func.php');
 require_once('show_movies.php');
+require_once('movies_function.php');
+require_once('again_mo_func.php');
 
-function rent_movie2($argv)
-{
-
-
-}
-
-function rent_movie($argv)
-{
-	$tmp = verif_rent_movie($argv);
-	if ($tmp == 1)
-	{
-		$connect = new MongoClient();
-		$db = $connect->db_etna;
-		$collection = $db->students;
-		$collection2 = $db->movies;
-		$cursor = $collection->findOne(array("login" => $argv[2]));
-		$cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
-		if ($cursor2["stock"] == 0)
-			echo "Stock-out !\n";
-		else {
-			$newdata = array('$set' => array("stock" => $cursor2["stock"] - 1));
-			if (isset($cursor2["renting_students"]))
-				$newdata2 = array('$set' => array("renting_students" => $cursor2["renting_students"] . $cursor['_id']->{'$id'} . ", "));
-			else
-				$newdata2 = array('$set' => array("renting_students" => $cursor['_id']->{'$id'} . ", "));
-			$collection2->update(array("imdb_code" => $argv[3]), $newdata);
-			$collection2->update(array("imdb_code" => $argv[3]), $newdata2, array("upsert" => true));
-			if (isset($cursor["rented_movies"]))
-				$newdata3 = array('$set' => array("rented_movies" => $cursor["rented_movies"] . $cursor2['_id']->{'$id'} . ", "));
-			else
-				$newdata3 = array('$set' => array("rented_movies" => $cursor2['_id']->{'$id'} . ", "));
-			$collection->update(array("login" => $argv[2]), $newdata3, array("upsert" => true));
-		}
-	}
-}
-
-function verif_rent_movie($argv)
-{
-	$connect = new MongoClient();
-	$db = $connect->db_etna;
-  $collection = $db->students;
-	$collection2 = $db->movies;
-
-	if (isset($argv[2]) && isset($argv[3]))
-	{
-		$cursor = $collection->findOne(array("login" => $argv[2]));
-		if (isset($cursor))
-		{
-			$cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
-			if (isset($cursor2))
-				return (1);
-			else
-				echo "imdb_code incorrect \n";
-		}
-		else
-			echo "Login incorrect ou n'est pas enregistré \n";
-	}
-	else
-		echo "Pas assez d'arguments !\n";
-	return (0);
-}
 
 function movies_storing($argv)
 {
 	$connect = new MongoClient();
-  $db = $connect->db_etna;
+	$db = $connect->db_etna;
 	$collection = $db->movies;
         $file = "movies.csv";
 	if (is_readable($file) == true)
@@ -82,7 +23,7 @@ function movies_storing($argv)
 	{
 		$int = rand(0, 5);
 		$document = array( "imdb_code" => $tab[$i][1], "title" => $tab[$i][5],
-			"year" => intval($tab[$i][11]), "genres" => explode( ',', $tab[$i][12]),
+			"year" => intval($tab[$i][11]), "genres" => explode( ', ', $tab[$i][12]),
 			"directors" => explode( ',', $tab[$i][7]), "rate" => floatval($tab[$i][9]),
 			"link" => $tab[$i][15], "stock" => $int
 		);
