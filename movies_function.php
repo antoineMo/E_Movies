@@ -70,6 +70,7 @@ function is_movie_rented($argv)
 
 function up_user($argv)
 {
+	$i = 0;
 	$connect = new MongoClient();
 	$db = $connect->db_etna;
 	$collection = $db->students;
@@ -77,18 +78,15 @@ function up_user($argv)
 	
 	$cursor = $collection->findOne(array("login" => $argv[2]));
 	$cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
-	
 	$array = explode( ', ', $cursor["rented_movies"]);
-	$i = 0;
-	$newupdate = " ";
-	
+	$newupdate = "";
 	while (isset($array[$i]))
 	{
 		if ($array[$i] != $cursor2['_id']->{'$id'})
 		{
 			$newupdate .= $array[$i];
 			if ($array[$i] != null)
-			   $newupdate .= ", ";
+				$newupdate .= ", ";
 		}
 	$i++;
 	}
@@ -98,24 +96,22 @@ function up_user($argv)
 
 function up_movie($argv)
 {
+	$i = 0;
 	$connect = new MongoClient();
 	$db = $connect->db_etna;
 	$collection = $db->students;
 	$collection2 = $db->movies;
-	
 	$cursor = $collection->findOne(array("login" => $argv[2]));
 	$cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
-	
 	$array = explode( ', ', $cursor2["renting_students"]);
-	$i = 0;
-	$newupdate = " ";
+	$newupdate = "";
 	while (isset($array[$i]))
 	{
 		if ($array[$i] != $cursor['_id']->{'$id'})
 		{
 			$newupdate .= $array[$i];
 			if ($array[$i] != null)
-			   $newupdate .= ", ";
+				$newupdate .= ", ";
 		}
 	$i++;
 	}
