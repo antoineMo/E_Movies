@@ -1,29 +1,24 @@
 <?php
 
 function verif_update($str)
-{	
-	if ($str == "name")
-	{
+{
+	if ($str == "name") {
 		echo "New name ? \n> ";
 		$up = verif_name();
 	}
-	else if ($str == "age")
-	{
+	else if ($str == "age") {
 		echo "New age ? \n> ";
 		$up = verif_age();
 	}
-	else if ($str == "email")
-	{
+	else if ($str == "email") {
 		echo "New email ? \n> ";
 		$up = verif_mail();
 	}
-	else if ($str == "phone")
-	{
+	else if ($str == "phone") {
 		echo "New age ? \n> ";
 		$up = verif_phone();
 	}
-	else
-	{
+	else	{
 		echo "cannot update\n";
 		return (0);
 	}
@@ -32,12 +27,12 @@ function verif_update($str)
 
 function update_student($argv)
 {
-	if (isset($argv[2]) && preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2], $array))
+	if (isset($argv[2]) && preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2],$array))
 	{
 		echo "What do you want to update? \n> ";
 		$str = readLine();
 		$up = verif_update($str);
-		
+
 		if ($up != 0)
 		{
 			$connect = new MongoClient();
@@ -74,7 +69,7 @@ function show_all_student()
 
 function show_student($argv)
 {
-	if (isset($argv[2]) && preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2], $array))
+	if (isset($argv[2]) && preg_match_all("/[a-z]{6}_[a-z0-9]/", $argv[2],$array))
 	{
 
 		$connect = new MongoClient();
@@ -89,13 +84,16 @@ function show_student($argv)
 			echo "age : " . $cursor["age"] . "\n";
 			echo "email : " . $cursor["email"] . "\n";
 			echo "phone : " . $cursor["phone"] . "\n";
-   		}
-		else
-			echo "login incorrect\n";
+   	}
+		else {
+			echo "Login incorrect \n";
+			return (0);
+		}
 	}
-
-	else
+	else if (!isset($argv[2]))
 		show_all_student();
+	else
+		echo "Login incorrect\n";
 }
 
 ?>

@@ -2,20 +2,20 @@
 
 function verif_rent_movie($argv)
 {
-        $connect = new MongoClient();
-        $db = $connect->db_etna;
-        $collection = $db->students;
-        $collection2 = $db->movies;
-        if (isset($argv[2]) && isset($argv[3]))
-        {
-                $cursor = $collection->findOne(array("login" => $argv[2]));
-                if (isset($cursor))
-                {
-                        $cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
-                        if (isset($cursor2))
-			   return (1);
-                        else
-				echo "imdb_code incorrect \n";
+  $connect = new MongoClient();
+  $db = $connect->db_etna;
+  $collection = $db->students;
+  $collection2 = $db->movies;
+  if (isset($argv[2]) && isset($argv[3]))
+  {
+    $cursor = $collection->findOne(array("login" => $argv[2]));
+    if (isset($cursor))
+    {
+      $cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
+      if (isset($cursor2))
+		    return (1);
+      else
+			  echo "imdb_code incorrect \n";
 		}
 		else
 			echo "Login incorrect ou n'est pas enregistré \n";
@@ -42,7 +42,7 @@ function return_movie($argv)
 
 function is_movie_rented($argv)
 {
-        $connect = new MongoClient();
+  $connect = new MongoClient();
 	$db = $connect->db_etna;
 	$collection = $db->students;
 	$collection2 = $db->movies;
@@ -75,7 +75,6 @@ function up_user($argv)
 	$db = $connect->db_etna;
 	$collection = $db->students;
 	$collection2 = $db->movies;
-	
 	$cursor = $collection->findOne(array("login" => $argv[2]));
 	$cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
 	$array = explode( ', ', $cursor["rented_movies"]);
@@ -91,7 +90,8 @@ function up_user($argv)
 	$i++;
 	}
 	$newdata = array('$set' => array("rented_movies" => $newupdate));
-	$collection->update(array("login" => $argv[2]), $newdata, array("upsert" => true));
+	$collection->update(array("login" => $argv[2]), $newdata,
+                      array("upsert" => true));
 }
 
 function up_movie($argv)
@@ -117,9 +117,9 @@ function up_movie($argv)
 	}
 	$newdata = array('$set' => array("stock" => $cursor2["stock"] + 1));
 	$newdata2 = array('$set' => array("renting_students" => $newupdate));
-	
 	$collection2->update(array("imdb_code" => $argv[3]), $newdata);
-	$collection2->update(array("imdb_code" => $argv[3]), $newdata2, array("upsert" => true));
+	$collection2->update(array("imdb_code" => $argv[3]), $newdata2,
+                       array("upsert" => true));
 }
 
 ?>

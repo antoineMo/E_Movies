@@ -6,10 +6,11 @@ function show_rented_movies($argv)
 	$db = $connect->db_etna;
 	$collection = $db->movies;
 	$collection2 = $db->students;
-	
-	$cursor = $collection->find(array('renting_students' => new MongoRegex("/,/i")));
+
+	$cursor = $collection->find(
+	array('renting_students' => new MongoRegex("/,/i")));
 	$cursor->sort(array('title' => 1));
-	
+
 	show_it_rented($cursor);
 }
 
@@ -29,7 +30,7 @@ function show_it_rented($cursor)
 		echo "\nrate      : " . $document["rate"] . "\n";
 		echo "stock     : " . $document["stock"] . "\n";
 		echo "borrower  : ";
-		$array = explode( ', ', $document["renting_students"]);	
+		$array = explode( ', ', $document["renting_students"]);
 		foreach ($array as $debt)
 		{
 			if ($debt != null) {
@@ -60,7 +61,7 @@ function rent_movie($argv)
 		{
 			echo "Stock-out !\n";
 		}
-		
+
 		else if ($ver == 0)
 		{
 			rent_this_movie($argv);
@@ -101,7 +102,7 @@ function rent_this_movie($argv)
 
 	$cursor = $collection->findOne(array("login" => $argv[2]));
 	$cursor2 = $collection2->findOne(array("imdb_code" => $argv[3]));
-	
+
 	$newdata = array('$set' => array("stock" => $cursor2["stock"] - 1));
 	if (isset($cursor2["renting_students"]))
 		$newdata2 = array('$set' => array("renting_students" =>
