@@ -20,8 +20,7 @@ function show_it_rented($cursor)
 	$connect = new MongoClient();
 	$db = $connect->db_etna;
 	$collection2 = $db->students;
-	foreach ($cursor as $document)
-	{
+	foreach ($cursor as $document) {
 		echo "\nimdb_code : " . $document["imdb_code"] . "\n";
 		echo "title     : " . $document["title"] . "\n";
 		echo "year      : " . $document["year"] . "\ngenres    : ";
@@ -31,11 +30,11 @@ function show_it_rented($cursor)
 		echo "stock     : " . $document["stock"] . "\n";
 		echo "borrower  : ";
 		$array = explode( ', ', $document["renting_students"]);
-		foreach ($array as $debt)
-		{
+		foreach ($array as $debt)	{
 			if ($debt != null) {
 				$cursor2 = $collection2->findOne(array('_id' => new MongoId($debt)));
 				echo $cursor2['login'] . ", ";
+				echo "\n\n--------------------------------------------------------";
 			}
 		}
 		echo "\n";
