@@ -17,6 +17,7 @@ function show_it($cursor)
                 echo "\nrate      : " . $document["rate"] . "\n";
                 echo "link      : " . $document["link"] . "\n";
                 echo "stock     : " . $document["stock"] . "\n";
+								echo "\n--------------------------------------------------\n";
 		$i++;
         }
 	echo "*" . $i . "*\n";

@@ -62,6 +62,7 @@ function show_all_student()
 		echo "age   : " . $document["age"] . "\n";
 		echo "email : " . $document["email"] . "\n";
 		echo "phone : " . $document["phone"] . "\n";
+		echo "\n----------------------------------\n";
 		$i++;
 	}
 	echo "*" . $i . "*\n";
